@@ -33,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (rb.velocity.magnitude < maxVelocity)
         {
-           rb.AddForce(moveVector * speed, ForceMode.VelocityChange);
+           rb.AddForce(moveVector * speed, ForceMode.Force);
         }
     }
 

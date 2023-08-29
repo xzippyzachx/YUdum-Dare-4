@@ -27,14 +27,23 @@ public class TetherManager : MonoBehaviour
     private List<TetherPole> tetherPoles = new List<TetherPole>();
     [SerializeField] private int maxTetherPoleAmount;
 
+    [SerializeField] private Player player;
+
+    private TetherPole lastPlaced;
+
     private void Awake()
     {
         Singleton = this;
     }
 
-    public void AttemptPlaceTetherPole(Vector3 position, Player player)
+    private void Start()
     {
-        if (AttemptRemoveTetherPole(position, player) || tetherPoles.Count >= maxTetherPoleAmount)
+        AttemptPlaceTetherPole(player.transform.position);
+    }
+
+    public void AttemptPlaceTetherPole(Vector3 position)
+    {
+        if (AttemptRemoveTetherPole(position) || tetherPoles.Count >= maxTetherPoleAmount)
         {
             return;
         }
@@ -44,32 +53,51 @@ public class TetherManager : MonoBehaviour
 
         newTetherPole.tetherLine.SetConnection(player.GetComponent<Rigidbody>(), new Vector3(0, 0.5f, 0));
 
-        if (tetherPoles.Count > 1)
+        if (tetherPoles.Count > 1 && lastPlaced != null)
         {
-            tetherPoles[tetherPoles.Count - 2].tetherLine.SetConnection(newTetherPole.tetherLine.GetRootPoint());
+            lastPlaced.tetherLine.SetConnection(newTetherPole.tetherLine.GetRootPoint());
+            newTetherPole.attachedPole = lastPlaced;
         }
+
+        lastPlaced = newTetherPole;
     }
 
-    public bool AttemptRemoveTetherPole(Vector3 position, Player player)
+    public bool AttemptRemoveTetherPole(Vector3 position)
     {
-        if (tetherPoles.Count == 0)
+        if (tetherPoles.Count <= 1)
         {
             return false;
         }
 
         TetherPole closestPole = GetClosestTetherPole(position);
-        if (closestPole == tetherPoles[tetherPoles.Count - 1] && Vector3.Distance(closestPole.transform.position, position) < 0.5f)
+        if (Vector3.Distance(closestPole.transform.position, position) < 0.5f)
         {
+            TetherPole attachedPole = closestPole.attachedPole;
+
+            if (tetherPoles.Count > 1 && attachedPole != null)
+            {
+                if (lastPlaced == closestPole)
+                {
+                    attachedPole.tetherLine.SetConnection(player.GetComponent<Rigidbody>(), new Vector3(0, 0.5f, 0));
+                    lastPlaced = attachedPole;
+                }
+                else
+                {
+                    attachedPole.tetherLine.RemoveConnection();
+                }
+            }
+            
             tetherPoles.Remove(closestPole);
             Destroy(closestPole.gameObject);
 
-            if (tetherPoles.Count > 0)
-            {
-                tetherPoles[tetherPoles.Count - 1].tetherLine.SetConnection(player.GetComponent<Rigidbody>(), new Vector3(0, 0.5f, 0));
-            }
             return true;
         }
         return false;
+    }
+
+    public void SetLastPlaced(TetherPole pole)
+    {
+        lastPlaced = pole;
     }
 
     public TetherPole GetClosestTetherPole(Vector3 position)

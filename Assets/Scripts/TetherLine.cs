@@ -50,6 +50,13 @@ public class TetherLine : MonoBehaviour
         tetherLinePoints[tetherLinePoints.Length - 1].springJoint.connectedAnchor = offset;
     }
 
+    public void RemoveConnection()
+    {
+        connection = null;
+        tetherLinePoints[tetherLinePoints.Length - 1].springJoint.connectedBody = GetRootPoint();
+        tetherLinePoints[tetherLinePoints.Length - 1].springJoint.connectedAnchor = new Vector3();
+    }
+
     public Rigidbody GetRootPoint()
     {
         return tetherLinePoints[0].rb;

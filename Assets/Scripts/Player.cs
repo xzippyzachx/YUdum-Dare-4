@@ -16,10 +16,8 @@ public class Player : MonoBehaviour
     {
         if (playerMovement.inputs.Player.Tether.triggered)
         {
-            TetherManager.Singleton.AttemptPlaceTetherPole(transform.position, this);
+            TetherManager.Singleton.AttemptPlaceTetherPole(transform.position);
         }
     }
-
-    
 
 }
