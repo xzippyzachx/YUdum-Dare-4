@@ -21,7 +21,7 @@ public class TetherPole : MonoBehaviour
 
     private void OnTriggerEnter(Collider col)
     {
-        if (oxygenSupply && col.CompareTag("Player"))
+        if (oxygenSupply && !tetherLine.HasConnection() && col.CompareTag("Player"))
         {
             TetherManager.Singleton.UntetherLastPlaced();
             tetherLine.SetConnection(col.GetComponent<Rigidbody>(), new Vector3(0, 0.5f, 0));

@@ -57,6 +57,11 @@ public class TetherLine : MonoBehaviour
         tetherLinePoints[tetherLinePoints.Length - 1].springJoint.connectedAnchor = new Vector3();
     }
 
+    public bool HasConnection()
+    {
+        return connection != null;
+    }
+
     public Rigidbody GetRootPoint()
     {
         return tetherLinePoints[0].rb;
