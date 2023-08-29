@@ -27,8 +27,6 @@ public class TetherManager : MonoBehaviour
     private List<TetherPole> tetherPoles = new List<TetherPole>();
     [SerializeField] private int maxTetherPoleAmount;
 
-    [SerializeField] private Player player;
-
     private TetherPole lastPlaced;
 
     private void Awake()
@@ -38,7 +36,7 @@ public class TetherManager : MonoBehaviour
 
     private void Start()
     {
-        AttemptPlaceTetherPole(player.transform.position);
+
     }
 
     public void AttemptPlaceTetherPole(Vector3 position)
@@ -51,44 +49,51 @@ public class TetherManager : MonoBehaviour
         TetherPole newTetherPole = Instantiate(tetherPolePrefab, position, Quaternion.identity).GetComponent<TetherPole>();
         tetherPoles.Add(newTetherPole);
 
-        newTetherPole.tetherLine.SetConnection(player.GetComponent<Rigidbody>(), new Vector3(0, 0.5f, 0));
+        newTetherPole.tetherLine.SetConnection(Player.player.playerMovement.rb, new Vector3(0, 0.5f, 0));
 
-        if (tetherPoles.Count > 1 && lastPlaced != null)
+        if (tetherPoles.Count > 0 && lastPlaced != null)
         {
             lastPlaced.tetherLine.SetConnection(newTetherPole.tetherLine.GetRootPoint());
-            newTetherPole.attachedPole = lastPlaced;
+            newTetherPole.attachedFromPole = lastPlaced;
+            lastPlaced.attachedToPole = newTetherPole;
         }
 
         lastPlaced = newTetherPole;
-    }
-
+        CheckOxygenConnection();
+    }                                                                
     public bool AttemptRemoveTetherPole(Vector3 position)
     {
-        if (tetherPoles.Count <= 1)
+        if (tetherPoles.Count == 0)
         {
             return false;
         }
 
         TetherPole closestPole = GetClosestTetherPole(position);
-        if (Vector3.Distance(closestPole.transform.position, position) < 0.5f)
+        if (Vector3.Distance(closestPole.transform.position, position) < 1f)
         {
-            TetherPole attachedPole = closestPole.attachedPole;
+            TetherPole attachedFromPole = closestPole.attachedFromPole;
 
-            if (tetherPoles.Count > 1 && attachedPole != null)
+            if (attachedFromPole != null)
             {
                 if (lastPlaced == closestPole)
                 {
-                    attachedPole.tetherLine.SetConnection(player.GetComponent<Rigidbody>(), new Vector3(0, 0.5f, 0));
-                    lastPlaced = attachedPole;
+                    attachedFromPole.tetherLine.SetConnection(Player.player.playerMovement.rb, new Vector3(0, 0.5f, 0));
+                    lastPlaced = attachedFromPole;
                 }
                 else
                 {
-                    attachedPole.tetherLine.RemoveConnection();
+                    attachedFromPole.tetherLine.RemoveConnection();
+                    if (closestPole.attachedToPole != null)
+                    {
+                        closestPole.attachedToPole.attachedFromPole = null;
+                    }
                 }
             }
             
             tetherPoles.Remove(closestPole);
             Destroy(closestPole.gameObject);
+
+            CheckOxygenConnection();
 
             return true;
         }
@@ -98,6 +103,38 @@ public class TetherManager : MonoBehaviour
     public void SetLastPlaced(TetherPole pole)
     {
         lastPlaced = pole;
+    }
+
+    public void UntetherLastPlaced()
+    {
+        if (lastPlaced == null)
+        {
+            return;
+        }
+
+        lastPlaced.tetherLine.RemoveConnection();
+        lastPlaced.attachedToPole = null;
+    }
+
+    public void CheckOxygenConnection()
+    {
+        if (!Check(lastPlaced))
+        {
+            Player.player.Die();
+        }
+    }
+
+    private bool Check(TetherPole pole)
+    {
+        if (pole.oxygenSupply)
+        {
+            return true;
+        }
+        else if (pole.attachedFromPole == null)
+        {
+            return false;
+        }
+        return Check(pole.attachedFromPole);
     }
 
     public TetherPole GetClosestTetherPole(Vector3 position)

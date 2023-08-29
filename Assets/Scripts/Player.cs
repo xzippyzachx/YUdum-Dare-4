@@ -1,15 +1,25 @@
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(PlayerMovement))]
 public class Player : MonoBehaviour
 {
+    public enum PlayerState {
+        Alive,
+        Dead,
+        Pause
+    }
+    public PlayerState playerState { get; private set; }
 
-    private PlayerMovement playerMovement;
+    public static Player player { get; private set; }
+
+    public PlayerMovement playerMovement { get; private set; }
+    
 
     private void Awake()
     {
         playerMovement = GetComponent<PlayerMovement>();
+        player = this;
     }
 
     private void Update()
@@ -18,6 +28,13 @@ public class Player : MonoBehaviour
         {
             TetherManager.Singleton.AttemptPlaceTetherPole(transform.position);
         }
+    }
+
+    public void Die()
+    {
+        playerState = PlayerState.Dead;
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
 }
