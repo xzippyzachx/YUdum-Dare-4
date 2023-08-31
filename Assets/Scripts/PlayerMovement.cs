@@ -10,6 +10,8 @@ public class PlayerMovement : MonoBehaviour
     public Rigidbody rb { get; private set; }
     public InputMaster inputs { get; private set; }
 
+    public Vector3 moveVector { get; private set; }
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -34,7 +36,12 @@ public class PlayerMovement : MonoBehaviour
         }
 
         Vector2 moveInputs = inputs.Player.Movement.ReadValue<Vector2>();
-        Vector3 moveVector = new Vector3(moveInputs.x, 0f, moveInputs.y);
+
+        if (moveInputs.magnitude == 0f)
+        {
+            return;
+        }
+        moveVector = new Vector3(moveInputs.x, 0f, moveInputs.y);
 
         if (rb.velocity.magnitude < maxVelocity)
         {

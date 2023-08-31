@@ -15,7 +15,8 @@ public class Player : MonoBehaviour
     public static Player player { get; private set; }
 
     public PlayerMovement playerMovement { get; private set; }
-    
+
+    [field:SerializeField] public Animator playerAnimator { get; private set; }
 
     private void Awake()
     {
@@ -29,15 +30,22 @@ public class Player : MonoBehaviour
         {
             TetherManager.Singleton.AttemptPlaceTetherPole(transform.position);
         }
+
+        playerAnimator.SetFloat("Speed", playerMovement.rb.velocity.magnitude);
+        if (playerMovement.moveVector.magnitude != 0f)
+        {
+            playerAnimator.transform.rotation = Quaternion.Slerp(playerAnimator.transform.rotation, Quaternion.LookRotation(playerMovement.moveVector), Time.deltaTime * 10f);
+        }
     }
 
     public void Die()
     {
         playerState = PlayerState.Dead;
-
+        playerAnimator.applyRootMotion = true;
+        playerAnimator.SetTrigger("Die");
         
         DOTween.Sequence()
-        .AppendInterval(0.5f)
+        .AppendInterval(1.5f)
         .AppendCallback(() => {
             GameUI.Singleton.TransitionOut();
         })
