@@ -36,7 +36,7 @@ public class TetherManager : MonoBehaviour
 
     private void Start()
     {
-
+        GameUI.Singleton.UpdateTetherCountText(tetherPoles.Count, maxTetherPoleAmount);
     }
 
     public void AttemptPlaceTetherPole(Vector3 position)
@@ -60,6 +60,7 @@ public class TetherManager : MonoBehaviour
 
         lastPlaced = newTetherPole;
         CheckOxygenConnection();
+        GameUI.Singleton.UpdateTetherCountText(tetherPoles.Count, maxTetherPoleAmount);
     }                                                                
     public bool AttemptRemoveTetherPole(Vector3 position)
     {
@@ -94,6 +95,7 @@ public class TetherManager : MonoBehaviour
             Destroy(closestPole.gameObject);
 
             CheckOxygenConnection();
+            GameUI.Singleton.UpdateTetherCountText(tetherPoles.Count, maxTetherPoleAmount);
 
             return true;
         }

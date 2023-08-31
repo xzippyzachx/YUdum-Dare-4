@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,7 +13,10 @@ public class LoadScene : MonoBehaviour
     {
         if (col.CompareTag("Player"))
         {
-            SceneManager.LoadScene(LoadSceneName);
+            GameUI.Singleton.TransitionOut();
+            DOTween.Sequence().AppendInterval(0.5f).OnComplete(() => {
+                SceneManager.LoadScene(LoadSceneName);
+            });
         }
     }
 

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -34,7 +35,10 @@ public class Player : MonoBehaviour
     {
         playerState = PlayerState.Dead;
 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        GameUI.Singleton.TransitionOut();
+        DOTween.Sequence().AppendInterval(0.5f).OnComplete(() => {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        });
     }
 
 }
