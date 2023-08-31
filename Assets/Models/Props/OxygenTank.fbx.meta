@@ -1,9 +1,14 @@
 fileFormatVersion: 2
-guid: 49494f3ec1c249849a94e7c3727c2188
+guid: 435fa81d88f1b1c4bb950297789cbc7d
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
   externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Base
+    second: {fileID: 2100000, guid: 1707e71689cbff24db5036a36ed7d9fe, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -12,13 +17,13 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: LadderPoleBase
-    second: {fileID: 2100000, guid: 1707e71689cbff24db5036a36ed7d9fe, type: 2}
+      name: LadderSteps
+    second: {fileID: 2100000, guid: dba65393ea995914c891f401d341751d, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: LadderSteps
-    second: {fileID: 2100000, guid: dba65393ea995914c891f401d341751d, type: 2}
+      name: Oxygen
+    second: {fileID: 2100000, guid: c89bb927385e7704cbf1873bf5023c9e, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

@@ -48,6 +48,7 @@ public class TetherManager : MonoBehaviour
 
         TetherPole newTetherPole = Instantiate(tetherPolePrefab, position, Quaternion.identity).GetComponent<TetherPole>();
         tetherPoles.Add(newTetherPole);
+        newTetherPole.PlayPlaceTween();
 
         newTetherPole.tetherLine.SetConnection(Player.player.playerMovement.rb, new Vector3(0, 0.5f, 0));
 
@@ -128,6 +129,10 @@ public class TetherManager : MonoBehaviour
 
     private bool Check(TetherPole pole)
     {
+        if (!pole.tetherLine.HasConnection())
+        {
+            return false;
+        }
         if (pole.oxygenSupply)
         {
             return true;
