@@ -7,6 +7,8 @@ public class TetherLine : MonoBehaviour
     
     [SerializeField] private TetherLinePoint[] tetherLinePoints;
 
+    [SerializeField] private Material noOxygenMat;
+
     [SerializeField] private Rigidbody connection;
 
     private LineRenderer lineRenderer;
@@ -65,5 +67,13 @@ public class TetherLine : MonoBehaviour
     public Rigidbody GetRootPoint()
     {
         return tetherLinePoints[0].rb;
+    }
+
+    public void SetHasOxygen(bool hasOxygen)
+    {
+        if (!hasOxygen)
+        {
+            lineRenderer.material = noOxygenMat;
+        }
     }
 }

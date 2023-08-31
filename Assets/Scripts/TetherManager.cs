@@ -139,9 +139,16 @@ public class TetherManager : MonoBehaviour
         }
         else if (pole.attachedFromPole == null)
         {
+            pole.tetherLine.SetHasOxygen(false);
             return false;
         }
-        return Check(pole.attachedFromPole);
+        bool check = Check(pole.attachedFromPole);
+        if (!check)
+        {
+            pole.tetherLine.SetHasOxygen(false);
+        }
+
+        return check;
     }
 
     public TetherPole GetClosestTetherPole(Vector3 position)

@@ -35,8 +35,14 @@ public class Player : MonoBehaviour
     {
         playerState = PlayerState.Dead;
 
-        GameUI.Singleton.TransitionOut();
-        DOTween.Sequence().AppendInterval(0.5f).OnComplete(() => {
+        
+        DOTween.Sequence()
+        .AppendInterval(0.5f)
+        .AppendCallback(() => {
+            GameUI.Singleton.TransitionOut();
+        })
+        .AppendInterval(0.5f)
+        .OnComplete(() => {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         });
     }

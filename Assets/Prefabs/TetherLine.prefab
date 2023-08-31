@@ -785,6 +785,7 @@ MonoBehaviour:
   - {fileID: 1541383674474205899}
   - {fileID: 2264390858565974384}
   - {fileID: 7816114404337679917}
+  noOxygenMat: {fileID: 2100000, guid: 6159a08026a7fe440884d11cf3ded057, type: 2}
   connection: {fileID: 0}
 --- !u!120 &3209339408192268696
 LineRenderer:
