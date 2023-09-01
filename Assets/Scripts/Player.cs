@@ -34,7 +34,7 @@ public class Player : MonoBehaviour
             TetherManager.Singleton.AttemptPlaceTetherPole(transform.position);
         }
 
-        playerAnimator.SetFloat("Speed", playerMovement.rb.velocity.magnitude);
+        playerAnimator.SetFloat("Speed", Mathf.Lerp(playerAnimator.GetFloat("Speed"), playerMovement.rb.velocity.magnitude, Time.deltaTime * 10f));
         if (playerMovement.moveVector.magnitude != 0f)
         {
             playerAnimator.transform.rotation = Quaternion.Slerp(playerAnimator.transform.rotation, Quaternion.LookRotation(playerMovement.moveVector), Time.deltaTime * 10f);
