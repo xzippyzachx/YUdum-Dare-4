@@ -123,6 +123,7 @@ public class TetherManager : MonoBehaviour
     {
         if (!Check(lastPlaced))
         {
+            lastPlaced.tetherLine.RemoveConnection();
             Player.player.Die();
         }
     }
@@ -139,13 +140,13 @@ public class TetherManager : MonoBehaviour
         }
         else if (pole.attachedFromPole == null)
         {
-            pole.tetherLine.SetHasOxygen(false);
+            pole.SetHasOxygen(false);
             return false;
         }
         bool check = Check(pole.attachedFromPole);
         if (!check)
         {
-            pole.tetherLine.SetHasOxygen(false);
+            pole.SetHasOxygen(false);
         }
 
         return check;

@@ -18,6 +18,9 @@ public class Player : MonoBehaviour
 
     [field:SerializeField] public Animator playerAnimator { get; private set; }
 
+    [SerializeField] private AudioSource decompressionAudio;
+    [SerializeField] private AudioSource heartBeatAudio;
+
     private void Awake()
     {
         playerMovement = GetComponent<PlayerMovement>();
@@ -43,9 +46,11 @@ public class Player : MonoBehaviour
         playerState = PlayerState.Dead;
         playerAnimator.applyRootMotion = true;
         playerAnimator.SetTrigger("Die");
+        decompressionAudio.Play();
+        heartBeatAudio.Play();
         
         DOTween.Sequence()
-        .AppendInterval(1.5f)
+        .AppendInterval(2f)
         .AppendCallback(() => {
             GameUI.Singleton.TransitionOut();
         })
