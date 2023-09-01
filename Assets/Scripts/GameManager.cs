@@ -17,7 +17,6 @@ public class GameManager : MonoBehaviour
             }
             else if (_singleton != value)
             {
-                Debug.Log($"{nameof(GameManager)} instance already exists, destroying object!");
                 Destroy(value.gameObject);
             }
         }

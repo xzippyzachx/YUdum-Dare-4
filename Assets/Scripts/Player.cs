@@ -21,6 +21,10 @@ public class Player : MonoBehaviour
     [SerializeField] private AudioSource decompressionAudio;
     [SerializeField] private AudioSource heartBeatAudio;
 
+    [SerializeField] private ParticleSystem duskKickParts;
+
+    private float lastPartsTime;
+
     private void Awake()
     {
         playerMovement = GetComponent<PlayerMovement>();
@@ -34,15 +38,27 @@ public class Player : MonoBehaviour
             TetherManager.Singleton.AttemptPlaceTetherPole(transform.position);
         }
 
-        playerAnimator.SetFloat("Speed", Mathf.Lerp(playerAnimator.GetFloat("Speed"), playerMovement.rb.velocity.magnitude, Time.deltaTime * 10f));
+        float speed = Mathf.Lerp(playerAnimator.GetFloat("Speed"), playerMovement.rb.velocity.magnitude, Time.deltaTime * 10f);
+        playerAnimator.SetFloat("Speed", speed);
         if (playerMovement.moveVector.magnitude != 0f)
         {
             playerAnimator.transform.rotation = Quaternion.Slerp(playerAnimator.transform.rotation, Quaternion.LookRotation(playerMovement.moveVector), Time.deltaTime * 10f);
+        }
+
+        if (speed > 0.5f && Time.timeSinceLevelLoad - lastPartsTime > 0.5f)
+        {
+            lastPartsTime = Time.timeSinceLevelLoad;
+            duskKickParts.Play();
         }
     }
 
     public void Die()
     {
+        if (playerState == PlayerState.Dead)
+        {
+            return;
+        }
+
         playerState = PlayerState.Dead;
         playerAnimator.applyRootMotion = true;
         playerAnimator.SetTrigger("Die");

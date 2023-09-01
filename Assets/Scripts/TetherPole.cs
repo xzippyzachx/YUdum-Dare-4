@@ -8,6 +8,7 @@ public class TetherPole : MonoBehaviour
     [field:SerializeField] public TetherLine tetherLine { get; private set; }
 
     [SerializeField] private GameObject model;
+    [SerializeField] private ParticleSystem duskKickParts;
     [SerializeField] private Material noOxygenMat;
 
     public TetherPole attachedFromPole;
@@ -54,8 +55,10 @@ public class TetherPole : MonoBehaviour
         GetComponent<AudioSource>().Play();
         model.transform.DOScale(0.5f, 0);
         model.transform.DOMoveY(0.5f, 0);
-        model.transform.DOScale(1, 0.5f);
-        model.transform.DOMoveY(0, 0.5f);
+        model.transform.DOScale(1, 0.3f);
+        model.transform.DOMoveY(0, 0.3f).OnComplete(() => {
+            duskKickParts.Play();
+        });
     }
     
 }
