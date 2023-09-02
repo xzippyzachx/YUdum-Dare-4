@@ -35,10 +35,14 @@ public class GameUI : MonoBehaviour
 
     private void Start()
     {
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
-
+        ShowCursor(false);
         TransitionIn();
+    }
+
+    public void ShowCursor(bool show)
+    {
+        Cursor.visible = show;
+        Cursor.lockState = show ? CursorLockMode.None : CursorLockMode.Locked;
     }
 
     public void UpdateTetherCountText(int currentAmount, int maxAmount)

@@ -27,4 +27,12 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(this.gameObject);
         Singleton = this;
     }
+
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            GameUI.Singleton.ShowCursor(!Cursor.visible);
+        }
+    }
 }
