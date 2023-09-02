@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Player))]
@@ -9,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
 
     public Rigidbody rb { get; private set; }
     public InputMaster inputs { get; private set; }
+    public PlayerInput playerInput { get; private set; }
 
     public Vector3 moveVector { get; private set; }
 
@@ -16,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         inputs = new InputMaster();
+        playerInput = GetComponent<PlayerInput>();
     }
 
     public void OnEnable()
