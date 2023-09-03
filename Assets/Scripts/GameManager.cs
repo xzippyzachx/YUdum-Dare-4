@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
             GameUI.Singleton.ShowCursor(!Cursor.visible);
         }
 
-        if (Input.GetKey(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
             GameUI.Singleton.TransitionOut();
             DOTween.Sequence().AppendInterval(0.5f).OnComplete(() => {
