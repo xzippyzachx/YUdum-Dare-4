@@ -76,4 +76,13 @@ public class Player : MonoBehaviour
         });
     }
 
+    private void OnTriggerEnter(Collider col)
+    {
+        if (col.CompareTag("Ravine") && playerState == PlayerState.Alive)
+        {
+            TetherManager.Singleton.UntetherLastPlaced();
+            TetherManager.Singleton.CheckOxygenConnection();
+        }
+    }
+
 }
